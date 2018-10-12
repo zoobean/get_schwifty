@@ -9,7 +9,7 @@ module GetSchwifty
         "data-get-schwifty" => id
       }
 
-      params.merge({ route: route })
+      params.merge!({ route: route })
       opts["data-get-schwifty-params"] = params.to_json if params
 
       args = [
