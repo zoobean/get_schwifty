@@ -15,7 +15,10 @@ GetSchwifty = function(app) {
 
     var newContent = document.createRange().createContextualFragment(response.body);
     var newEl = newContent.firstChild;
-    oldEl.parentNode.replaceChild(newContent, oldEl);
+
+    if (oldEl.parentNode) {
+      oldEl.parentNode.replaceChild(newContent, oldEl);
+    }
 
     dispatchEvent('render:after', newEl, { schwiftyJobId: schwiftyJobId, html: response });
   }
