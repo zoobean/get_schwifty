@@ -1,9 +1,5 @@
-GetSchwifty = function(app) {
-  _App = app;
-
-  // Polyfill Internet Explorer >= 9
-  if ( typeof window.CustomEvent === "function" ) return false;
-
+// Polyfill Internet Explorer >= 9
+if ( typeof window.CustomEvent != "function" ) {
   function CustomEvent ( event, params ) {
     params = params || { bubbles: false, cancelable: false, detail: null };
     var evt = document.createEvent( 'CustomEvent' );
@@ -14,6 +10,10 @@ GetSchwifty = function(app) {
   CustomEvent.prototype = window.Event.prototype;
 
   window.CustomEvent = CustomEvent;
+}
+
+GetSchwifty = function(app) {
+  _App = app;
 
   function dispatchEvent(ev, el, data) {
     data = data || {}
