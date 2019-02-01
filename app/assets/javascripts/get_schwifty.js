@@ -1,27 +1,24 @@
-// Polyfill Internet Explorer >= 9
-if ( typeof window.CustomEvent != "function" ) {
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: null };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-  }
-
-  CustomEvent.prototype = window.Event.prototype;
-
-  window.CustomEvent = CustomEvent;
-}
-
 GetSchwifty = function(app) {
   _App = app;
 
   function dispatchEvent(ev, el, data) {
+    var event;
     data = data || {}
-    var event = new CustomEvent('getSchwifty.' + ev, {
-      detail: data,
-      bubbles: true
-    });
-    el.dispatchEvent(event)
+
+    try {
+      event = new CustomEvent('getSchwifty.' + ev, {
+        detail: data,
+        bubbles: true
+      });
+    } catch (e) {
+      console.log(e);
+      event = new Event('getSchwifty.' + ev, {
+        detail: data,
+        bubbles: true
+      });
+    }
+
+    el.dispatchEvent(event);
   }
 
   function replaceContent(schwiftyJobId, oldEl, response) {
