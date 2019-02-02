@@ -1,3 +1,20 @@
+// Polyfill IE
+(function () {
+
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: null };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+
 if (typeof Object.assign != 'function') {
   // Must be writable: true, enumerable: false, configurable: true
   Object.defineProperty(Object, "assign", {
@@ -31,24 +48,15 @@ if (typeof Object.assign != 'function') {
 GetSchwifty = function(app) {
   _App = app;
 
+  console.log('updated');
+
   function dispatchEvent(ev, el, data) {
-    var event;
     data = data || {}
-
-    try {
-      event = new CustomEvent('getSchwifty.' + ev, {
-        detail: data,
-        bubbles: true
-      });
-    } catch (e) {
-      console.log(e);
-      event = new Event('getSchwifty.' + ev, {
-        detail: data,
-        bubbles: true
-      });
-    }
-
-    el.dispatchEvent(event);
+    var event = new CustomEvent('getSchwifty.' + ev, {
+      detail: data,
+      bubbles: true
+    });
+    el.dispatchEvent(event)
   }
 
   function replaceContent(schwiftyJobId, oldEl, response) {
