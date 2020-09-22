@@ -18,7 +18,7 @@ puts '<Channel.rendered>'
 
     def route
 puts '<Channel.route>'
-      Rails.cache.read(channel_name)
+      Rails.cache.fetch(channel_name, race_condition_ttl: 10.seconds) { params[:route] }
     end
 
     def controller
