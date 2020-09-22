@@ -2,6 +2,7 @@ module GetSchwifty
   # :nodoc
   module Helper
     def get_schwifty(route, params = nil, &blk)
+puts '<GetSchwifty:Helpre:get_schwifty>'
       id = SecureRandom.hex
       Rails.cache.write("get_schwifty:#{id}", route)
 
